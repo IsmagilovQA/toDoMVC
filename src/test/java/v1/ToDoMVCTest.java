@@ -1,6 +1,5 @@
 package v1;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Test;
@@ -26,17 +25,17 @@ public class ToDoMVCTest {
         delete("2");
         assertTasks("1", "3", "4");
 
-        complete("4");
+        toggle("4"); //complete
         clearCompleted();
         assertTasks("1", "3");
 
-        completeAll();
+        toggleAll(); //complete all
         clearCompleted();
-        assertNoTasks(empty);
+        assertNoTasks();
     }
 
-    private void assertNoTasks(CollectionCondition collectionCondition) {
-        tasks.shouldBe(collectionCondition);
+    private void assertNoTasks() {
+        tasks.shouldBe(empty);
     }
 
     private void add(String... taskTexts) {
@@ -57,11 +56,11 @@ public class ToDoMVCTest {
         tasks.find(exactText(taskText)).hover().$(".destroy").click();
     }
 
-    private void complete(String taskText) {
+    private void toggle(String taskText) {
         tasks.find(exactText(taskText)).hover().$(".toggle").click();
     }
 
-    private void completeAll() {
+    private void toggleAll() {
         $("#toggle-all").click();
     }
 

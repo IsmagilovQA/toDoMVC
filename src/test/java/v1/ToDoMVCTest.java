@@ -1,17 +1,20 @@
 package v1;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Test;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class ToDoMVCTest {
     static {
         Configuration.pageLoadStrategy = "normal";
+
     }
 
     @Test
@@ -32,6 +35,16 @@ public class ToDoMVCTest {
         toggleAll(); //complete all
         clearCompleted();
         assertNoTasks();
+    }
+
+    @Test
+    public void editionDeletingTest() {
+        open("https://todomvc4tasj.herokuapp.com/");
+
+        add("1", "2");
+
+        tasks.find(exactText("1")).doubleClick().find(String.valueOf(attribute("value")));
+
     }
 
     private void assertNoTasks() {

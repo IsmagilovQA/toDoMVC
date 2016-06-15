@@ -10,13 +10,13 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class EndToEndToDoVMCWorkflow {
+public class EndToEndToDoMVCWorkflow {
     static {
         Configuration.remote = "http://192.168.102.137:4444/wd/hub/";
     }
 
     @Test
-    public void endToEndToDoVMCWorkflow() {
+    public void endToEndToDoMVCWorkflow() {
 
         open("https://todomvc4tasj.herokuapp.com/");
         add("1");

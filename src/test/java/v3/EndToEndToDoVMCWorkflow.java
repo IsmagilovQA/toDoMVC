@@ -10,34 +10,34 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class ToDoMVCTest {
+public class EndToEndToDoVMCWorkflow {
     static {
         Configuration.remote = "http://192.168.102.137:4444/wd/hub/";
     }
 
     @Test
-    public void toDoMVCWorkflow() {
+    public void endToEndToDoVMCWorkflow() {
 
         open("https://todomvc4tasj.herokuapp.com/");
         add("1");
         edit("1", "5");
-        delete("5");
 
         open("https://todomvc4tasj.herokuapp.com/#/active");
-        assertNoTasks();
+        assertTasks("5");
+        delete("5");
         add("2");
-        toggle("2");
-        assertNoTasks();
+        editCanceled("2", "333");
+        toggle("2"); //complete
 
         open("https://todomvc4tasj.herokuapp.com/#/completed");
         assertTasks("2");
-        toggle("2");
-        assertNoTasks();
-        toggleAll();
+        toggleAll(); //reopen all
+
+        open("https://todomvc4tasj.herokuapp.com/#/");
         assertTasks("2");
+        toggle("2"); //complete
         clearCompleted();
         assertNoTasks();
-
     }
 
     private void assertNoTasks() {
@@ -55,16 +55,19 @@ public class ToDoMVCTest {
         tasks.find(cssClass("editing")).find(".edit").setValue(e2).pressEnter();
     }
 
-    private void assertTasks(String... taskTexts) {
-        tasks.shouldHave(exactTexts(taskTexts));
+    private void editCanceled(String e1, String e2) {
+        tasks.find(exactText(e1)).doubleClick();
+        tasks.find(cssClass("editing")).find(".edit").setValue(e2).pressEscape();
     }
+
+    private void assertTasks(String... taskTexts) { tasks.shouldHave(exactTexts(taskTexts)); }
 
     private void clearCompleted() {
         $("#clear-completed").click();
     }
 
     private void delete(String taskText) {
-            tasks.find(exactText(taskText)).hover().$(".destroy").click();
+        tasks.find(exactText(taskText)).hover().$(".destroy").click();
     }
 
     private void toggle(String taskText) {

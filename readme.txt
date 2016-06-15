@@ -5,7 +5,7 @@ Switch filters:
     	All, Completed
 	Completed: 
     	All, Active   
-
+       
 All filter:
     Create
     Edit
@@ -22,21 +22,20 @@ Active filter:
     Delete
     Complete 
     Complete all
+    Clear completed  
     
 Completed filter:
     Edit
     Delete
     Reopen
     Reopen all
-    Complete all
+    Clear completed
     
 General:
 	Items left counter
         
-Unusual operations:
-	Edit to empty
-    While edit, unable to complete
-    Active filter:
-		Reopen all    	
-    Completed filter: 
-    	Create task
+Additional edit operations:
+    Delete by clearing field
+    Cancel editing via esc
+    Accept editing via tab
+    Accept editing via click on other element.

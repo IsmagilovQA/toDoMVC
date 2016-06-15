@@ -1,81 +1,30 @@
 package v1;
-
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.ElementsCollection;
 import org.junit.Test;
 
-import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.CollectionCondition.*;
 
 public class ToDoMVCTest {
-    static {
-        Configuration.pageLoadStrategy = "normal";
-
-    }
 
     @Test
-    public void toDoMVCWorkflow() {
-
+    public void testTaskManage() {
         open("https://todomvc4tasj.herokuapp.com/");
 
-        add("1", "2", "3", "4");
-        assertTasks("1", "2", "3", "4");
+        $("#new-todo").setValue("task1").pressEnter();
+        $("#new-todo").setValue("task2").pressEnter();
+        $("#new-todo").setValue("task3").pressEnter();
+        $("#new-todo").setValue("task4").pressEnter();
+        $$("#todo-list li").shouldHave(exactTexts("task1", "task2", "task3", "task4"));
 
-        delete("2");
-        assertTasks("1", "3", "4");
+        $("#todo-list li", 1).hover().$(".destroy").hover().click();
+        $$("#todo-list li").shouldHave(exactTexts("task1", "task3", "task4"));
 
-        toggle("4"); //complete
-        clearCompleted();
-        assertTasks("1", "3");
-
-        toggleAll(); //complete all
-        clearCompleted();
-        assertNoTasks();
-    }
-
-    @Test
-    public void editionDeletingTest() {
-        open("https://todomvc4tasj.herokuapp.com/");
-
-        add("1", "2");
-
-        tasks.find(exactText("1")).doubleClick().find(String.valueOf(attribute("value")));
-
-    }
-
-    private void assertNoTasks() {
-        tasks.shouldBe(empty);
-    }
-
-    private void add(String... taskTexts) {
-        for (String taskText : taskTexts) {
-            $("#new-todo").setValue(taskText).pressEnter();
-        }
-    }
-
-    private void assertTasks(String... taskTexts) {
-        tasks.shouldHave(exactTexts(taskTexts));
-    }
-
-    private void clearCompleted() {
+        $("#todo-list li", 2).$(".toggle").click();
         $("#clear-completed").click();
-    }
+        $$("#todo-list li").shouldHave(exactTexts("task1", "task3"));
 
-    private void delete(String taskText) {
-        tasks.find(exactText(taskText)).hover().$(".destroy").click();
-    }
-
-    private void toggle(String taskText) {
-        tasks.find(exactText(taskText)).hover().$(".toggle").click();
-    }
-
-    private void toggleAll() {
         $("#toggle-all").click();
+        $("#clear-completed").click();
+        $$("#todo-list li").shouldBe(empty);
     }
-
-    private ElementsCollection tasks = $$("#todo-list li");
 }
